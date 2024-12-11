@@ -1,12 +1,45 @@
 # Supabase Unity Template
 
-Template to quickly get started using Supabase with Unity!
+Forked from: https://github.com/wiverson/supabase-unity-template
 
-For more information on usage and step-by-step details
-for how this template was created, check out the
-documentation for the [Supabase-CSharp library](https://github.com/supabase-community/supabase-csharp),
-as well as
-the [Unity specific documentation](https://github.com/supabase-community/supabase-csharp/blob/master/Documentation/Unity.md).
+Integrating Supabase into Unity featuring Social Sign-in and client-side supabase updates.
 
-From time to time I'm posting videos on my [YouTube channel](https://www.youtube.com/changenode) about Supabase and Unity, 
-so check that out as well!
+Unity Editor Version: 2022.3.10f1
+
+This tutorial will currently assume you're familar with Supabase and have a project with various tables and authentication already configured; but you're wanting to add Unity mobile support.
+
+### Steps
+
+1. Add your supabase
+
+1. Update your Supabase auth configuration to accept a "deeplink":
+
+   - https://supabase.com/dashboard/project/my-supabase-project-id/auth/url-configuration
+   - URL Configuration (Sidebar menu item)
+   - Redirect URLs (Subtitle)
+   - Add Url (Button)
+
+1. Your newly added callback deeplink should now be added (you can chose whatever name you desire)
+
+![](/Assets/Tutorial/callback.png)
+
+3. Build your project for iOS
+
+4. Open up the newly built projects folder and navigate to `Info.plist`
+
+5. Add the following somewhere in the file (ensure that it doesn't override any other settings)
+   - This will allow for "deeplinking" which will be used to navigate back to your app from the web browser i.e: characterquest://callback
+
+```
+<key>CFBundleURLTypes</key>
+    <array>
+    <dict>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>CFBundleURLSchemes</key>
+        <array>
+        <string>characterquest</string>
+        </array>
+    </dict>
+</array>
+```
