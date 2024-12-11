@@ -10,17 +10,28 @@ using UnityEngine.UI;
 
 public class SupabaseActions : MonoBehaviour
 {
-    public TMP_Text errorText;
     public SupabaseManager SupabaseManager = null!;
-
+    public TMP_Text errorText;
     public Text characterText;
     public InputField knownCharacterInput;
-
     public InputField characterRemovalInput;
 
-    public void GetCharacters()
+    public Button getCharactersButton;
+    public Button updateCharacterButton;
+    public Button removeCharacterButton;
+
+    public async void GetCharacters()
     {
-        GetKnownCharacters();
+        SetSpinner(getCharactersButton,true);
+        await GetKnownCharacters();
+        SetSpinner(getCharactersButton,false);
+    }
+
+    private void SetSpinner(Button button,bool enabled){
+        var spinner = button.GetComponentInChildren<Spinner>();
+        spinner.GetComponent<Image>().enabled = enabled;
+        spinner.enabled = enabled;
+        button.interactable = !enabled;
     }
 
     private async Task GetKnownCharacters()
@@ -40,9 +51,17 @@ public class SupabaseActions : MonoBehaviour
             }
         }
 
-    public void UpdateCharacter()
+    
+    public async void UpdateCharacter()
     {
-        UpdateKnownCharacter();
+        if(knownCharacterInput.text == "")
+        {
+            knownCharacterInput.text = "NO CHARACTER";
+            return;
+        }
+        SetSpinner(updateCharacterButton,true);
+        await UpdateKnownCharacter();
+        SetSpinner(updateCharacterButton,false);
     }
 
     private async Task UpdateKnownCharacter()
@@ -80,9 +99,16 @@ public class SupabaseActions : MonoBehaviour
         }
     }
 
-    public void RemoveCharacter()
+    public async void RemoveCharacter()
     {
-        RemoveKnownCharacter();
+        if(characterRemovalInput.text == "")
+        {
+            characterRemovalInput.text = "NO CHARACTER";
+            return;
+        }
+        SetSpinner(removeCharacterButton,true);
+        await RemoveKnownCharacter();
+        SetSpinner(removeCharacterButton,false);
     }
 
     private async Task RemoveKnownCharacter()
@@ -92,7 +118,6 @@ public class SupabaseActions : MonoBehaviour
             string characterText = characterRemovalInput.text;
             Debug.Log("Removing known character");
 
-            // First get the character record
             var characters = await SupabaseManager.Supabase()?.From<Character>()
                 .Filter("user_id", Postgrest.Constants.Operator.Equals, SupabaseManager.Supabase().Auth.CurrentUser.Id)
                 .Filter("text", Postgrest.Constants.Operator.Equals, characterText)
@@ -120,7 +145,6 @@ public class SupabaseActions : MonoBehaviour
         }
     }
 }
-
 
 [Table("known_characters")]
 public class Character : BaseModel

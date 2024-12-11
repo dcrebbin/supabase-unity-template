@@ -11,6 +11,7 @@ using UnityEngine;
 using static Supabase.Gotrue.Constants;
 
 using System.Web;
+using UnityEngine.UI;
 
 
 //From https://github.com/wiverson/supabase-unity-template
@@ -27,7 +28,10 @@ public class SocialSignIn : MonoBehaviour
     private bool _doSignOut;
     private bool _doExchangeCode;
 
+    public Button signInButton;
+    public Button signOutButton;
     public Provider provider;
+    public GameObject signInSpinner;
 
     public TMP_Text debugText;
 
@@ -81,7 +85,11 @@ public class SocialSignIn : MonoBehaviour
         if (_doSignOut)
         {
             _doSignOut = false;
+            signOutButton.interactable = false;
+            signOutButton.GetComponentInChildren<Spinner>().gameObject.SetActive(true);
             await SupabaseManager.Supabase()!.Auth.SignOut();
+            signOutButton.GetComponentInChildren<Spinner>().gameObject.SetActive(false);
+            signOutButton.interactable = true;
             _doSignOut = false;
         }
 
@@ -96,8 +104,12 @@ public class SocialSignIn : MonoBehaviour
         if (_doSignIn)
         {
             _doSignIn = false;
+            signInButton.interactable = false;
+            signInSpinner.SetActive(true);
             await PerformSignIn();
             _doSignIn = false;
+            signInButton.interactable = true;
+            signInSpinner.SetActive(false);
         }
     }
 
