@@ -1,4 +1,14 @@
-# Supabase Unity Template
+# Supabase Unity Template for iOS & Android (Social Sign-in)
+
+Sign in via one of the providers (more is configurable)
+
+![](/Assets/Tutorial/social-sign-in.png)
+
+Once signed in via a web client you'll be redirected back to your app via a deeplink.
+
+You can now perform authenticated supabase client requests.
+
+![](/Assets/Tutorial/signed-in.png)
 
 Forked from: https://github.com/wiverson/supabase-unity-template
 
