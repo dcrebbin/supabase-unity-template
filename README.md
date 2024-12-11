@@ -1,6 +1,6 @@
-# Supabase Unity Template for iOS & Android (Social Sign-in)
+# Supabase Unity Template for iOS & Android (with Social Sign-in)
 
-Sign in via one of the providers (more is configurable)
+Sign in via one of the providers (more is configurable).
 
 ![](/Assets/Tutorial/social-sign-in.png)
 
@@ -16,7 +16,7 @@ Integrating Supabase into Unity featuring Social Sign-in and client-side supabas
 
 Unity Editor Version: 2022.3.10f1
 
-This tutorial will currently assume you're familar with Supabase and have a project with various tables and authentication already configured; but you're wanting to add Unity mobile support.
+This tutorial will currently assume you're familiar with Supabase and have a project with various tables and authentication already configured; but you're wanting to add Unity mobile support.
 
 ### Steps
 
@@ -35,10 +35,13 @@ This tutorial will currently assume you're familar with Supabase and have a proj
 
 3. Build your project for iOS
 
+   Note: each time the project build is regenerated or fully rebuilt, you'll need to update the plist again. To fix this a post build script can be put in place`
+
 4. Open up the newly built projects folder and navigate to `Info.plist`
 
 5. Add the following somewhere in the file (ensure that it doesn't override any other settings)
-   - This will allow for "deeplinking" which will be used to navigate back to your app from the web browser i.e: characterquest://callback
+
+- This will allow for "deeplinking" which will be used to navigate back to your app from the web browser i.e: characterquest://callback
 
 ```
 <key>CFBundleURLTypes</key>
