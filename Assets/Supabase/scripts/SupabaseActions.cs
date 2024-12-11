@@ -20,13 +20,9 @@ public class SupabaseActions : MonoBehaviour
     public Button updateCharacterButton;
     public Button removeCharacterButton;
 
-    public async void GetCharacters()
-    {
-        SetSpinner(getCharactersButton,true);
-        await GetKnownCharacters();
-        SetSpinner(getCharactersButton,false);
-    }
-
+    /**
+    Utility function for better async UI feedback
+    */
     public void SetSpinner(Button button,bool enabled){
         var spinner = button.GetComponentInChildren<Spinner>();
         spinner.GetComponent<Image>().enabled = enabled;
@@ -34,6 +30,18 @@ public class SupabaseActions : MonoBehaviour
         button.interactable = !enabled;
     }
 
+    public async void GetCharacters()
+    {
+        SetSpinner(getCharactersButton,true);
+        await GetKnownCharacters();
+        SetSpinner(getCharactersButton,false);
+    }
+
+
+    /**
+    Example of retrieving a list of characters from a table called "known_characters"
+    Your table policy will need to be configured to allow for this action (SELECT).
+    */
     private async Task GetKnownCharacters()
         {
             try
@@ -64,6 +72,10 @@ public class SupabaseActions : MonoBehaviour
         SetSpinner(updateCharacterButton,false);
     }
 
+    /**
+    Example of updating a character in a table called "known_characters"
+    Your table policy will need to be configured to allow for this action (UPDATE).
+    */
     private async Task UpdateKnownCharacter()
     {
         try
@@ -111,6 +123,10 @@ public class SupabaseActions : MonoBehaviour
         SetSpinner(removeCharacterButton,false);
     }
 
+    /**
+    Example of removing a character from a table called "known_characters"
+    Your table policy will need to be configured to allow for this action (DELETEx).
+    */
     private async Task RemoveKnownCharacter()
     {
         try
@@ -129,10 +145,7 @@ public class SupabaseActions : MonoBehaviour
                 return;
             }
 
-            // Get the existing character with its proper ID
             var existingCharacter = (Character)characters.Models.First();
-            
-            // Delete using the proper character object
             var response = await SupabaseManager.Supabase()?.From<Character>().Delete(existingCharacter);
             characterRemovalInput.text = characterText + " REMOVED";
             Debug.Log($"Removed character: {characterText}");
@@ -146,6 +159,9 @@ public class SupabaseActions : MonoBehaviour
     }
 }
 
+/**
+Example data model for a table called "known_characters"
+*/
 [Table("known_characters")]
 public class Character : BaseModel
 {
