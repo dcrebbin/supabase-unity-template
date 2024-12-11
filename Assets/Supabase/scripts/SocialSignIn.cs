@@ -29,6 +29,8 @@ public class SocialSignIn : MonoBehaviour
 
     public Provider provider;
 
+    public TMP_Text debugText;
+
     // Transactional data
     private string _pkce;
     private string _token;
@@ -135,6 +137,7 @@ public class SocialSignIn : MonoBehaviour
         {
             Debug.Log($"PKCE: {_pkce}");
             Debug.Log($"Token: {_token}");
+            debugText.text = "PKCE: " + _pkce + "\nToken: " + _token;
             
             Session session = (await SupabaseManager.Supabase()!.Auth.ExchangeCodeForSession(_pkce, _token)!);
             
@@ -142,7 +145,7 @@ public class SocialSignIn : MonoBehaviour
             PlayerPrefs.DeleteKey("PKCE");
             PlayerPrefs.Save();
             
-            ErrorText.text = $"Success! Signed in as {session.User?.UserMetadata["name"]}";
+            ErrorText.text = $"Success! Signed in as {session.User?.UserMetadata["name"].ToString().Split(" ")[0]}";
         }
         catch (GotrueException goTrueException)
         {

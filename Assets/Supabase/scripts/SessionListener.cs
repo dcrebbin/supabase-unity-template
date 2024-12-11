@@ -16,7 +16,6 @@ namespace com.example
 		public GameObject signInActionsContainer;
 		public GameObject signOutButton;
 		public GameObject signInButtonsContainer;
-		public TMP_Text debugText;
 
 		public void UnityAuthListener(IGotrueClient<User, Session> sender, Constants.AuthState newState)
 		{
@@ -29,13 +28,11 @@ namespace com.example
 
 			if (hasSignedIn)
 			{
-				LoggedInEmailAddress.text = "No user logged in";
-				name.text = "Name:";
-				email.text = "Email:";
+				name.text = "";
+				email.text = "";
 			}
 			else
 			{
-				debugText.text = JsonUtility.ToJson(sender.CurrentUser, true);
 				name.text = "Hey " + sender.CurrentUser?.UserMetadata?.GetValueOrDefault("full_name", "N/A").ToString().Split(" ")[0] + "!";
 				email.text = sender.CurrentUser?.Email.Substring(0,3) + "...@"+ sender.CurrentUser?.Email.Split("@")[1];
 			}
