@@ -27,7 +27,7 @@ public class SupabaseActions : MonoBehaviour
         SetSpinner(getCharactersButton,false);
     }
 
-    private void SetSpinner(Button button,bool enabled){
+    public void SetSpinner(Button button,bool enabled){
         var spinner = button.GetComponentInChildren<Spinner>();
         spinner.GetComponent<Image>().enabled = enabled;
         spinner.enabled = enabled;

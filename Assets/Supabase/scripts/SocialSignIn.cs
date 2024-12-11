@@ -13,8 +13,6 @@ using static Supabase.Gotrue.Constants;
 using System.Web;
 using UnityEngine.UI;
 
-
-//From https://github.com/wiverson/supabase-unity-template
 public class SocialSignIn : MonoBehaviour
 {
     [SerializeField] private string RedirectUrl = "characterquest://callback";
@@ -22,6 +20,7 @@ public class SocialSignIn : MonoBehaviour
     // Public Unity References
     public TMP_Text ErrorText = null!;
     public SupabaseManager SupabaseManager = null!;
+    public SupabaseActions SupabaseActions = null!;
     
     // Private implementation
     private bool _doSignIn;
@@ -43,7 +42,10 @@ public class SocialSignIn : MonoBehaviour
     {
         // Register for deep link activation
         Application.deepLinkActivated += OnDeepLinkActivated;
-        
+
+        SupabaseActions = FindObjectOfType<SupabaseActions>();
+        SupabaseManager = FindObjectOfType<SupabaseManager>();
+
         // Check if we were launched with a deep link
         if (!string.IsNullOrEmpty(Application.absoluteURL))
         {
@@ -85,11 +87,9 @@ public class SocialSignIn : MonoBehaviour
         if (_doSignOut)
         {
             _doSignOut = false;
-            signOutButton.interactable = false;
-            signOutButton.GetComponentInChildren<Spinner>().gameObject.SetActive(true);
+            SupabaseActions.SetSpinner(signOutButton,true);
             await SupabaseManager.Supabase()!.Auth.SignOut();
-            signOutButton.GetComponentInChildren<Spinner>().gameObject.SetActive(false);
-            signOutButton.interactable = true;
+            SupabaseActions.SetSpinner(signOutButton,false);
             _doSignOut = false;
         }
 
