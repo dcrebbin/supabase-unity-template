@@ -1166,7 +1166,7 @@ MonoBehaviour:
   RedirectUrl: characterquest://callback
   ErrorText: {fileID: 1234395729}
   SupabaseManager: {fileID: 655311794}
-  SupabaseActions: {fileID: 0}
+  SupabaseActions: {fileID: 655311796}
   signInButton: {fileID: 313737610}
   signOutButton: {fileID: 577411871}
   provider: 14
@@ -1730,7 +1730,7 @@ MonoBehaviour:
   RedirectUrl: characterquest://callback
   ErrorText: {fileID: 1234395729}
   SupabaseManager: {fileID: 655311794}
-  SupabaseActions: {fileID: 0}
+  SupabaseActions: {fileID: 655311796}
   signInButton: {fileID: 572243539}
   signOutButton: {fileID: 577411871}
   provider: 0
@@ -5427,7 +5427,7 @@ MonoBehaviour:
   RedirectUrl: characterquest://callback
   ErrorText: {fileID: 1234395729}
   SupabaseManager: {fileID: 655311794}
-  SupabaseActions: {fileID: 0}
+  SupabaseActions: {fileID: 655311796}
   signInButton: {fileID: 1789185886}
   signOutButton: {fileID: 577411871}
   provider: 7
@@ -6521,7 +6521,7 @@ MonoBehaviour:
   RedirectUrl: characterquest://callback
   ErrorText: {fileID: 1234395729}
   SupabaseManager: {fileID: 655311794}
-  SupabaseActions: {fileID: 0}
+  SupabaseActions: {fileID: 655311796}
   signInButton: {fileID: 0}
   signOutButton: {fileID: 577411871}
   provider: 4

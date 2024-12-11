@@ -2,7 +2,9 @@ using com.example;
 
 using com.example;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Supabase.Gotrue;
 using Supabase.Gotrue.Exceptions;
@@ -61,6 +63,9 @@ public class SocialSignIn : MonoBehaviour
         // Parse the URL to get the code parameter
         Uri uri = new Uri(url);
         string code = HttpUtility.ParseQueryString(uri.Query).Get("code");
+
+        Debug.Log("URL: " + url);
+        Debug.Log("Code: " + code);
         
         if (!string.IsNullOrEmpty(code))
         {
@@ -96,7 +101,15 @@ public class SocialSignIn : MonoBehaviour
         if (_doExchangeCode)
         {
             _doExchangeCode = false;
-            await PerformExchangeCode();
+            try
+            {
+                await PerformExchangeCode();
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.Message);
+                Debug.Log(e);
+            }
             _doExchangeCode = false;
         }
 
@@ -106,34 +119,55 @@ public class SocialSignIn : MonoBehaviour
             _doSignIn = false;
             signInButton.interactable = false;
             signInSpinner.SetActive(true);
-            await PerformSignIn();
+            try
+            {
+                await PerformSignIn();
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.Message);
+                Debug.Log(e);
+            }
             _doSignIn = false;
             signInButton.interactable = true;
             signInSpinner.SetActive(false);
         }
     }
 
+    private string GenerateNonce(){
+        var random = new RNGCryptoServiceProvider();
+        var bytes = new byte[16];
+        random.GetBytes(bytes);
+        return Convert.ToBase64String(bytes).TrimEnd('=').Replace('+', '-').Replace('/', '_');  
+    }
+
     private async Task PerformSignIn()
     {
         try
         {
+            Debug.Log($"Starting sign-in with provider: {provider}");
+            var nonce = GenerateNonce();
             var providerAuth = (await SupabaseManager.Supabase()!.Auth.SignIn(provider, new SignInOptions
             {
                 RedirectTo = RedirectUrl,
                 FlowType = OAuthFlowType.PKCE,
+                QueryParams = new Dictionary<string, string> { { "nonce", nonce } }
             }))!;
+            
+            Debug.Log($"Provider Auth URI: {providerAuth.Uri}");
             _pkce = providerAuth.PKCEVerifier;
             
             // Save PKCE to PlayerPrefs
             PlayerPrefs.SetString("PKCE", _pkce);
             PlayerPrefs.Save();
 
+            Debug.Log("Opening URL in browser...");
             Application.OpenURL(providerAuth.Uri.ToString());
         }
         catch (GotrueException goTrueException)
         {
+            Debug.LogError($"Provider: {provider}, Error: {goTrueException.Message}");
             ErrorText.text = $"{goTrueException.Reason} {goTrueException.Message}";
-            Debug.Log(goTrueException.Message, gameObject);
             Debug.LogException(goTrueException, gameObject);
         }
         catch (Exception e)
@@ -170,6 +204,24 @@ public class SocialSignIn : MonoBehaviour
         {
             Debug.Log(e.Message, gameObject);
             Debug.Log(e, gameObject);
+        }
+    }
+
+    private string GenerateRandomString(int length)
+    {
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        var random = new System.Random();
+        return new string(Enumerable.Repeat(chars, length)
+            .Select(s => s[random.Next(s.Length)]).ToArray());
+    }
+
+    private string HashString(string input)
+    {
+        using (var sha256 = SHA256.Create())
+        {
+            var bytes = System.Text.Encoding.UTF8.GetBytes(input);
+            var hash = sha256.ComputeHash(bytes);
+            return BitConverter.ToString(hash).Replace("-", "").ToLower();
         }
     }
 }
