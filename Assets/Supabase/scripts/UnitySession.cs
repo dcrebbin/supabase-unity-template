@@ -39,7 +39,12 @@ namespace com.example
 			try
 			{
 				string filePath = FilePath();
-				string str = JsonConvert.SerializeObject(session);
+				var settings = new JsonSerializerSettings
+				{
+					ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
+					MissingMemberHandling = MissingMemberHandling.Ignore
+				};
+				string str = JsonConvert.SerializeObject(session, settings);
 				using StreamWriter file = new(filePath);
 				file.Write(str);
 				file.Dispose();
@@ -77,7 +82,12 @@ namespace com.example
 
 			try
 			{
-				return JsonConvert.DeserializeObject<Session>(sessionJson);
+				var settings = new JsonSerializerSettings
+				{
+					ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
+					MissingMemberHandling = MissingMemberHandling.Ignore
+				};
+				return JsonConvert.DeserializeObject<Session>(sessionJson, settings);
 			}
 			catch (Exception e)
 			{

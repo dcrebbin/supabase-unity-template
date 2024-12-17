@@ -20,7 +20,7 @@ namespace com.example
 		public void UnityAuthListener(IGotrueClient<User, Session> sender, Constants.AuthState newState)
 		{
 			bool hasSignedIn = sender.CurrentUser?.Email != null;
-			Debug.Log("hasSignedIn: " + hasSignedIn);			
+			Debug.Log("hasSignedIn: " + hasSignedIn);
 			signInButtonsContainer.SetActive(!hasSignedIn);
 			signInActionsContainer.SetActive(hasSignedIn);
 			signOutButton.SetActive(hasSignedIn);
@@ -35,7 +35,7 @@ namespace com.example
 				Debug.Log("Current User: " + sender.CurrentUser?.UserMetadata?.GetValueOrDefault("full_name", "N/A").ToString().Split(" ")[0]);
 				Debug.Log("Current User: " + sender.CurrentUser?.Email);
 				name.text = "Hey " + sender.CurrentUser?.UserMetadata?.GetValueOrDefault("full_name", "N/A").ToString().Split(" ")[0] + "!";
-				email.text = sender.CurrentUser?.Email.Substring(0,3) + "...@"+ sender.CurrentUser?.Email.Split("@")[1];
+				email.text = sender.CurrentUser?.Email.Substring(0, 3) + "...@" + sender.CurrentUser?.Email.Split("@")[1];
 			}
 
 			switch (newState)

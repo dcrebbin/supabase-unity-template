@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d58aec5c262074f4fa0def5f27bc4dc0, type: 3}
   m_Name: SupabaseSettings
   m_EditorClassIdentifier: 
-  SupabaseURL:
-  SupabaseAnonKey:
+  SupabaseURL: https://soepovzxokfrxgwbrgxv.supabase.co
+  SupabaseAnonKey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNvZXBvdnp4b2tmcnhnd2JyZ3h2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTQ2Njg3NDMsImV4cCI6MjAzMDI0NDc0M30.6sRqGNoQMCMbu6mi5QJDGl-NcakAidbGrVPPdx4M79Y
